@@ -29,6 +29,8 @@ fn install_wazuh_agent() -> Result<(), String> {
             "apt-get"
         } else if Path::new("/etc/redhat-release").exists() {
             "yum"
+        } else if Path::new("/etc/fedora-release").exists() {
+            "dnf"
         } else {
             return Err("Unsupported operating system.".to_string());
         }
