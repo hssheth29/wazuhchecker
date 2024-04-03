@@ -80,7 +80,8 @@ fn install_wazuh_agent() -> Result<(), InstallError> {
         distribution, version, architecture, get_package_name(&distribution, &architecture)
     );
 
-    let package_path = Path::new("/tmp/wazuh-agent.").join(get_package_extension(&distribution));
+    let package_extension = get_package_extension(&distribution);
+    let package_path = Path::new("/tmp/").join(format!("wazuh-agent.{}", package_extension));
 
     // Check for curl
     if Command::new("curl").output().is_err() {
@@ -104,7 +105,6 @@ fn install_wazuh_agent() -> Result<(), InstallError> {
         ));
     }
 
-    let package_extension = get_package_extension(&distribution);
     let install_command = if package_extension == "deb" {
         "dpkg -i"
     } else {
@@ -184,7 +184,7 @@ fn get_package_name(distribution: &str, architecture: &str) -> String {
         ("alpine", _) => "wazuh-agent-4.7.3-r1.apk".to_string(),
         ("amazon", _) => "wazuh-agent-4.7.3-1.ppc64le.rpm".to_string(),
         ("centos", "5") | ("oracle", "5") => "wazuh-agent-4.7.3-1.el5.x86_64.rpm".to_string(),
-	("centos", _) => "wazuh-agent-4.7.3-1.x86_64.rpm".to_string(),
+        ("centos", _) => "wazuh-agent-4.7.3-1.x86_64.rpm".to_string(),
         ("debian", _) => "wazuh-agent_4.7.3-1_amd64.deb".to_string(),
         ("fedora", _) => "wazuh-agent-4.7.3-1.x86_64.rpm".to_string(),
         ("opensuse", _) => "wazuh-agent-4.7.3-1.x86_64.rpm".to_string(),
